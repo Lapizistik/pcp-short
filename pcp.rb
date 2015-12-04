@@ -9,17 +9,15 @@
 # instance :: [[x0,y0], [x1,y1], …, [xn,yn]]
 # depth :: maximum search depth
 def solve(instance, solution=[], x='', y='', depth: 30)
-  return nil if depth < 0 # hm, no solution found within search depth
   instance.each.with_index do |p,i|
     (xx,yy) = [x,y].zip(p).map { |s,w| s+w }
     l = [xx.length, yy.length].min
     return [*solution, i] if xx == yy # found it. Get outta here
     if (xx[0...l] == yy[0...l]) && # hm, possible solution?
-       (s=solve(instance, [*solution, i], xx, yy, depth: depth-1))
+       (s=solve(instance, [*solution, i], xx[l..-1], yy[l..-1], depth: depth-1))
       return s # ha, found one somewhere deeper
     end
-  end
-  return nil # no solution in this branch
+  end && nil if depth > 0
 end
 
 # Usage examples:
